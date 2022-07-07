@@ -80,7 +80,52 @@ exports.getGameIdeaById = async (req, res) => {
 
 exports.updateGameIdeaById = async (req, res) => {
     console.log('Hitting Update Game By ID');
-    res.send(JSON.stringify({debug : true}));
+    try{
+        const _id = Types.ObjectId(req.params.gameId);
+        const {
+            name,
+            genre,
+            gameTags,
+            gameLoop,
+            inspirations,
+            targetSystems,
+            notes
+        } = req.body;
+        const validations = validateGameIdea({name, gameLoop});
+        if(validations.isValid){
+            const gameIdea = await GameIdea.findOneAndUpdate({_id}, {
+                name,
+                genre,
+                gameTags,
+                gameLoop,
+                inspirations,
+                targetSystems,
+                notes
+            });
+            return res.send(JSON.stringify({
+                success : true,
+                data : {
+                    name,
+                    genre,
+                    gameTags,
+                    gameLoop,
+                    inspirations,
+                    targetSystems,
+                    notes
+                }
+            }));
+        }
+        return res.send(JSON.stringify({
+            success : false,
+            validations
+        }))
+    }catch(errors){
+        console.log('Errors Updating Game Idea ' + errors);
+        return res.send(JSON.stringify({
+            success : false,
+            errors
+        }));
+    }
 }
 
 exports.deleteGameIdeaById = async (req, res) => {
