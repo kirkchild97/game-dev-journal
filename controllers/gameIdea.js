@@ -1,4 +1,5 @@
 const GameIdea = require('../models/gameIdea');
+const { Types } = require('mongoose');
 
 exports.createGameIdea = async (req, res) => {
     console.log('Hitting Create Game');
@@ -45,14 +46,36 @@ exports.createGameIdea = async (req, res) => {
     }
 }
 
-exports.getAllGameIdeas = async (req, res) => {
+exports.getAllUserGameIdeas = async (req, res) => {
     console.log('Hitting Get All Games');
     res.send(JSON.stringify({debug : true}));
 }
 
 exports.getGameIdeaById = async (req, res) => {
     console.log('Hitting Get Game By ID');
-    res.send(JSON.stringify({debug : true}));
+    try{
+        const { gameId } = req.params;
+        const _id = Types.ObjectId(gameId);
+        const gameIdea = await GameIdea.findOne({_id});
+        if(gameIdea){
+            return res.send(JSON.stringify({
+                success : true,
+                data : gameIdea
+            }));
+        }
+        else{
+            return res.send(JSON.stringify({
+                success : false,
+                errors : 'Invalid ID'
+            }))
+        }
+    }catch(errors){
+        console.log(`Error getting Game Idea: ${errors}`);
+        return res.send(JSON.stringify({
+            success : false,
+            errors
+        }))
+    }
 }
 
 exports.updateGameIdeaById = async (req, res) => {
@@ -62,7 +85,20 @@ exports.updateGameIdeaById = async (req, res) => {
 
 exports.deleteGameIdeaById = async (req, res) => {
     console.log('Hitting Delete Game by ID');
-    res.send(JSON.stringify({debug : true}));
+    try{
+        const { gameId } = req.params;
+        const _id = Types.ObjectId(gameId);
+        // Ensure that the user is the owner of the game Idea with REACT implementation
+        const deletedGame = await GameIdea.findByIdAndDelete(_id);
+        return res.send(JSON.stringify({
+            success : true
+        }));
+    }catch(errors){
+        return res.send(JSON.stringify({
+            success : false,
+            errors
+        }));
+    }
 }
 
 const validateGameIdea = ({name, gameLoop}) => {

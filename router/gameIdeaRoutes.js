@@ -4,7 +4,7 @@ const router = express.Router();
 
 const {
     createGameIdea,
-    getAllGameIdeas,
+    getAllUserGameIdeas,
     getGameIdeaById,
     updateGameIdeaById,
     deleteGameIdeaById
@@ -12,11 +12,11 @@ const {
 
 router.post('/new', createGameIdea);
 
-router.get('/', getAllGameIdeas);
-router.get('/:id', getGameIdeaById);
+router.get('/', getAllUserGameIdeas);
+router.get('/:gameId', getGameIdeaById);
 
-router.put('/:id', updateGameIdeaById);
+router.put('/:gameId', updateGameIdeaById);
 
-router.delete('/:id', deleteGameIdeaById);
+router.delete('/:gameId', deleteGameIdeaById);
 
 module.exports = router;
