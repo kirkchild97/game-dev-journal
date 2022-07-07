@@ -1,17 +1,19 @@
 const express = require('express');
 const mongoose = require('mongoose');
+require('dotenv').config();
 
 const app = express();
 const PORT = 8080;
-const {
-    MONGOUSER,
-    MONGOPASSWORD
-} = process.env;
 
-const MONGOURI = `mongodb+srv://${MONGOUSER}:${MONGOPASSWORD}@game-dev-journal.ozbk2qw.mongodb.net/?retryWrites=true&w=majority`;
+const MONGOURI = process.env.MONGO_URI; 
+
+// Routers
+const authRoutes = require('./router/authRoutes');
 
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
+
+app.use(authRoutes);
 
 mongoose.connect(MONGOURI, () => {
     console.log('Database Connected Successfully. Starting Server');
