@@ -12,7 +12,7 @@ const {
 
 router.post('/new', createGameIdea);
 
-router.get('/', getAllUserGameIdeas);
+router.get('', getAllUserGameIdeas);
 router.get('/:gameId', getGameIdeaById);
 
 router.put('/:gameId', updateGameIdeaById);

@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux/es/exports';
+import { useNavigate } from 'react-router-dom';
+
 import { emailRegex } from '../../constants/validations';
 
 import { tryLoginUser } from '../../state/actions/userActions';
@@ -47,11 +49,16 @@ const LoginForm = ({className}) => {
             return;
         }
         console.log('Sending Login Request Now');
-        await dispatch(tryLoginUser(inputs));
-        setInputs({
-            userNameEmail : '',
-            password : ''
-        });
+        const result = await dispatch(tryLoginUser(inputs));
+        if(tryLoginUser.fulfilled.match(result) && result.payload.success){
+            setInputs({
+                userNameEmail : '',
+                password : ''
+            });
+        }
+        else{
+            alert('Invalid Login Credentials');
+        }
     }
 
     return (

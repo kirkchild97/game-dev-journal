@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
+const cors = require('cors');
 
 const app = express();
 const PORT = 8080;
@@ -11,6 +12,7 @@ const MONGOURI = process.env.MONGO_URI;
 const authRoutes = require('./router/authRoutes');
 const gameRoutes = require('./router/gameIdeaRoutes');
 
+app.use(cors({origin : 'http://localhost:3000'}));
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
 

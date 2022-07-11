@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
@@ -60,8 +61,16 @@ exports.loginUser = async (req, res) => {
         const checkPassword = await bcrypt.compare(password, checkUser.password);
         if(checkPassword){
             // Assign Json web token here along with necessary data
+            const token = jwt.sign({
+                _id : checkUser._id
+            }, process.env.JWT_SECRET,
+            {
+                expiresIn : '2 days'
+            });
             return res.send(JSON.stringify({
-                success : true
+                success : true,
+                token,
+                homeUserName : checkUser.userName
             }));
         }
         return res.send(JSON.stringify({

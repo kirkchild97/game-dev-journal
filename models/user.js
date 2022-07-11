@@ -24,6 +24,10 @@ const userSchema = new Schema({
         type : String,
         minLength : 8
     },
+    gameIdeas : {
+        type : [Schema.Types.ObjectId],
+        default : []
+    },
     createdAt : {
         type : Date,
         default : new Date(),
