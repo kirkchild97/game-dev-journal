@@ -1,14 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { isCompositeComponent } from "react-dom/test-utils";
 
 import {
     getAllUserGameURL,
-    createGameURL
+    createGameURL,
+    updateGameIdeaURL
 } from "../../constants/endpoints";
 
 import {
     postHeader,
-    getHeader
+    getHeader,
+    putHeader
 } from '../../constants/fetchHeaders';
 
 export const getGameIdeas = createAsyncThunk('getGameIdeas', async (data) => {
@@ -42,3 +43,21 @@ export const createGameIdeas = createAsyncThunk('createGameIdea', async ({userNa
         return results;
     }catch(e){console.log(`Error Sending Create Game Request: ${e}`);}
 });
+
+export const updateGameIdeas = createAsyncThunk('updateGameIdea', async ({userName, gameData}) => {
+    try{
+        console.log('Hitting Update Game Idea Action');
+        const token = localStorage.getItem('token');
+        const req = {
+            headers : putHeader(token),
+            method : 'PUT',
+            body: JSON.stringify({
+                ...gameData
+            })
+        }
+        const gameId = gameData._id;
+        const results = await fetch(updateGameIdeaURL({userName, gameId}), req)
+            .then(res => res.json());
+        return results;
+    }catch(e){console.log(`Error Sending Update to Server: ${e}`);}
+})

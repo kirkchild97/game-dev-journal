@@ -35,14 +35,13 @@ exports.createGameIdea = async (req, res) => {
             await gameIdea.save(async (error, game) => {
                 user.gameIdeas.push(game._id);
                 await user.save();
+                const token = jwt.sign({_id : middlewareUserId}, process.env.JWT_SECRET);
+                return res.send(JSON.stringify({
+                    success : true,
+                    gameData : game,
+                    token
+                }));
             });
-            const token = jwt.sign({_id : middlewareUserId}, process.env.JWT_SECRET);
-            return res.send(JSON.stringify({
-                success : true,
-                gameIdea,
-                gameIdeas : user.gameIdeas,
-                token
-            }));
         }
         return res.send(JSON.stringify({
             success : false,
@@ -95,7 +94,7 @@ exports.getGameIdeaById = async (req, res) => {
         if(gameIdea){
             return res.send(JSON.stringify({
                 success : true,
-                data : gameIdea
+                gameData : gameIdea
             }));
         }
         else{
@@ -117,8 +116,9 @@ exports.updateGameIdeaById = async (req, res) => {
     console.log('Hitting Update Game By ID');
     try{
         const { middlewareUserId } = req.body;
-        const _id = Types.ObjectId(req.params.gameId);
+        const user = await User.findOne({_id : middlewareUserId});
         const {
+            // _id,
             name,
             genre,
             gameTags,
@@ -128,19 +128,22 @@ exports.updateGameIdeaById = async (req, res) => {
             notes
         } = req.body;
         const validations = validateGameIdea({name, gameLoop});
-        if(validations.isValid){
-            const gameIdea = await GameIdea.findOneAndUpdate({_id}, {
-                name,
-                genre,
-                gameTags,
-                gameLoop,
-                inspirations,
-                targetSystems,
-                notes
-            });
-            return res.send(JSON.stringify({
-                success : true,
-                data : {
+        const _id = Types.ObjectId(req.params.gameId);
+        if(true){
+            console.log('User owns Game Idea, Continuing');
+            console.log(validations);
+            if(validations.isValid){
+                // const gameIdea = await GameIdea.findOneAndUpdate({_id}, {
+                //     name,
+                //     genre,
+                //     gameTags,
+                //     gameLoop,
+                //     inspirations,
+                //     targetSystems,
+                //     notes
+                // };
+                const gameIdea = await GameIdea.findOne({_id});
+                gameIdea.overwrite({
                     name,
                     genre,
                     gameTags,
@@ -148,13 +151,21 @@ exports.updateGameIdeaById = async (req, res) => {
                     inspirations,
                     targetSystems,
                     notes
-                }
-            }));
+                });
+
+                console.log(gameIdea);
+                
+                const result = await gameIdea.save();
+                return res.send(JSON.stringify({
+                    success : true,
+                    gameData : gameIdea
+                }));
+            }
         }
         return res.send(JSON.stringify({
             success : false,
             validations
-        }))
+        }));
     }catch(errors){
         console.log('Errors Updating Game Idea ' + errors);
         return res.send(JSON.stringify({

@@ -1,18 +1,38 @@
-import { useState } from 'react';
+import {
+    useState,
+    useEffect
+} from 'react';
 import {
     useDispatch,
     useSelector
 } from 'react-redux';
+import {
+    useParams,
+    useNavigate
+} from 'react-router-dom';
 
-import { createGameIdeas } from '../../state/actions/gameIdeaActions';
+import {
+    createGameIdeas,
+    updateGameIdeas
+} from '../../state/actions/gameIdeaActions';
 
 import DisplayFormList from './FormComponents/DisplayFormList';
 import DisplayNoteList from './FormComponents/DisplayFormNoteList';
 
 const AddGameIdeaForm = () => {
+    const nav = useNavigate();
+    
+    const { userName, gameId } = useParams();
     const dispatch = useDispatch();
     const { homeUserName } = useSelector(state => state.user);
+    const { gameIdeas } = useSelector(state => state.gameIdea);
 
+    // const editGame = gameId ? gameIdeas.filter(item => item._id === gameId)[0] : false;
+    
+    // Check for changes to address to account for going from Edit to Create New
+    
+    const isEditing = () => gameId !== undefined;
+    
     const [inputs, setInputs] = useState({
         name : '',
         genre : '',
@@ -30,7 +50,31 @@ const AddGameIdeaForm = () => {
     const [inspiration, setInpspiration] = useState('');
     const [targetSystem, setTargetSystem] = useState('');
     const [activeInput, setActiveInput] = useState('');
-
+    
+    useEffect(() => {
+        if(isEditing()){
+            const existingGame = gameIdeas.filter(item => item._id === gameId)[0];
+            setInputs(existingGame);
+        }else{
+            setInputs({
+                name : '',
+                genre : '',
+                gameTags : [],
+                gameLoop : '',
+                inspirations : [],
+                targetSystems : [],
+                notes : []
+            });
+        }
+        setNewNote({
+            title : '',
+            description : ''
+        });
+        setGameTag('');
+        setInpspiration('');
+        setTargetSystem('');
+        setActiveInput('');
+    }, [gameId]);
 
     const submitNote = () => {
         if(newNote.description !== '') {
@@ -142,27 +186,11 @@ const AddGameIdeaForm = () => {
             if(inputs.title !== '' && inputs.gameLoop !== ''){
                 console.log('Able to be submitted');
                 // Allow for Edit or Create
-                const gameData = {
-                    name : inputs.name,
-                    gameTags : inputs.gameTags,
-                    genre : inputs.genre,
-                    gameLoop : inputs.gameLoop,
-                    inspirations : inputs.inspirations,
-                    targetSystems : inputs.targetSystems,
-                    notes : inputs.notes
-                }
-                const result = await dispatch(createGameIdeas({userName : homeUserName, gameData}));
-                if(createGameIdeas.fulfilled.match(result) && result.payload.success){
+                const result = isEditing() ? await dispatch(updateGameIdeas({homeUserName, gameData : inputs})) :
+                    await dispatch(createGameIdeas({userName : homeUserName, gameData : inputs}));
+                if(createGameIdeas.fulfilled.match(result) || updateGameIdeas.fulfilled.match(result) && result.payload.success){
                     // Clear Inputs of Navigate to new Page CLear for now
-                    setInputs({
-                        name : '',
-                        genre : '',
-                        gameTags : [],
-                        gameLoop : '',
-                        inspirations : [],
-                        targetSystems : [],
-                        notes : []
-                    });
+                    nav(`/user/${homeUserName}`);
                 }
                 else{
                     alert('Something went wrong creating the new game idea!! Please try again');
@@ -173,7 +201,7 @@ const AddGameIdeaForm = () => {
     
     return (
         <form className='card p-3' onSubmit={(e) => handleSubmit(e)}>
-            <h2 className='h1'>Add New Game Idea!!</h2>
+            <h2 className='h1'>{isEditing() ? 'Edit' : 'Add New'} Game Idea!!</h2>
             <p className={inputs.name !== '' ? 'text-success' : 'text-danger'}>Name is required</p>
             <p className={inputs.gameLoop !== '' ? 'text-success' : 'text-danger'}>Game Loop is required</p>
             <div className='border-bottom border-dark py-3'>
@@ -232,9 +260,9 @@ const AddGameIdeaForm = () => {
                     <DisplayNoteList list={inputs.notes} listName='notes' removeItem={removeNoteItem} />
                 </div>
             </div>
-            <input type="submit" className='btn btn-primary' value="CREATE GAME IDEA" />
+            <input type="submit" className='btn btn-primary' value={isEditing() ? 'Submit Changes' : 'Create New Game Idea'} />
         </form>
     )
 }
 
-export default AddGameIdeaForm;
+export default AddGameIdeaForm; 

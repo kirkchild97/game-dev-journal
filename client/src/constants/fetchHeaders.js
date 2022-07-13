@@ -19,3 +19,7 @@ export const postHeader = (token) => {
 export const getHeader = (token) => {
     return checkTokenHeader(token);
 }
+
+export const putHeader = (token) => {
+    return checkTokenHeader(token);
+}
