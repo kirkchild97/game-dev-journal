@@ -61,3 +61,7 @@ export const updateGameIdeas = createAsyncThunk('updateGameIdea', async ({userNa
         return results;
     }catch(e){console.log(`Error Sending Update to Server: ${e}`);}
 })
+
+export const deleteGameIdea = createAsyncThunk('deleteGameIdea', async ({userName, gameId}) => {
+    
+})

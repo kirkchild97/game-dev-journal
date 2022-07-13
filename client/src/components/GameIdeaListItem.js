@@ -15,15 +15,12 @@ const GameIdeaListItem = ({gameData}) => {
         nav(`/user/${userName}/${gameData._id}`);
     }
 
-    const setEditGameIdea = (e) => {
-    }
-
-    const rowSettings = gameId === gameData._id ? 'table-primary' : '';
+    const rowSettings = () => gameId === gameData._id ? 'table-primary table-striped border-dark' : 'table-info table-striped border-dark';
 
     return (
-        <tr className="" onClick={(e) => setGameIdeaActive(e)}>
-            <td className="p-1">{gameData.name}</td>
-            <td className="border-start border-end border-dark">{gameData.gameLoop}</td>
+        <tr className={rowSettings()} onClick={(e) => setGameIdeaActive(e)}>
+            <td className="text-break p-1">{gameData.name}</td>
+            <td className="text-break border-start border-end border-dark">{gameData.gameLoop}</td>
             <td className="p-1">
                 <button name='deleteBtn' className="btn btn-danger">Delete</button>
                 <button name="editBtn" className="btn btn-info">Edit</button>

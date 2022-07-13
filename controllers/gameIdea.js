@@ -35,13 +35,14 @@ exports.createGameIdea = async (req, res) => {
             await gameIdea.save(async (error, game) => {
                 user.gameIdeas.push(game._id);
                 await user.save();
-                const token = jwt.sign({_id : middlewareUserId}, process.env.JWT_SECRET);
-                return res.send(JSON.stringify({
-                    success : true,
-                    gameData : game,
-                    token
-                }));
+                await console.log(game);
             });
+            const token = jwt.sign({_id : middlewareUserId}, process.env.JWT_SECRET);
+            return res.send(JSON.stringify({
+                success : true,
+                gameData : gameIdea,
+                token
+            }));
         }
         return res.send(JSON.stringify({
             success : false,
