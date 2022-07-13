@@ -8,7 +8,8 @@ const {
     getAllUserGameIdeas,
     getGameIdeaById,
     updateGameIdeaById,
-    deleteGameIdeaById
+    deleteGameIdeaById,
+    deleteGameIdeaGroupById
 } = require('../controllers/gameIdea');
 
 router.use(authorizeToken);
@@ -21,5 +22,6 @@ router.get('/:gameId', getGameIdeaById);
 router.put('/:gameId', updateGameIdeaById);
 
 router.delete('/:gameId', deleteGameIdeaById);
+router.delete('', deleteGameIdeaGroupById);
 
 module.exports = router;

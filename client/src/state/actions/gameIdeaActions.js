@@ -3,13 +3,16 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
     getAllUserGameURL,
     createGameURL,
-    updateGameIdeaURL
+    updateGameIdeaURL,
+    deleteGameIdeaURL,
+    deleteSelectedURL
 } from "../../constants/endpoints";
 
 import {
     postHeader,
     getHeader,
-    putHeader
+    putHeader,
+    deleteHeader
 } from '../../constants/fetchHeaders';
 
 export const getGameIdeas = createAsyncThunk('getGameIdeas', async (data) => {
@@ -63,5 +66,37 @@ export const updateGameIdeas = createAsyncThunk('updateGameIdea', async ({userNa
 })
 
 export const deleteGameIdea = createAsyncThunk('deleteGameIdea', async ({userName, gameId}) => {
-    
+    try{
+        console.log('Hitting Delete Action');
+        const token = localStorage.getItem('token');
+        const req = {
+            headers : deleteHeader(token),
+            method : 'DELETE',
+            body : JSON.stringify({
+                userName,
+                gameId
+            })
+        }
+        const results = await fetch(deleteGameIdeaURL({userName, gameId}), req)
+            .then(res => res.json());
+        return results;
+    }catch(e){console.log(`Error Sending Delete Request: ${e}`);}
 })
+
+export const deleteSelectedGames = createAsyncThunk('deleteSelectedGames', async ({userName, gameList}) => {
+    try{
+        console.log('Hitting Delete Select Action');
+        const token = localStorage.getItem('token');
+        console.log(gameList);
+        const req = {
+            headers : deleteHeader(token),
+            method : 'DELETE',
+            body : JSON.stringify({
+                gameList
+            })
+        }
+        const results = await fetch(deleteSelectedURL({userName}), req)
+            .then(res => res.json());
+        return results;
+    }catch(e){console.log(`Error Sending Delete Request: ${e}`);}
+});

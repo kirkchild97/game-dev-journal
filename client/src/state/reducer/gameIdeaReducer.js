@@ -3,7 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
     getGameIdeas,
     createGameIdeas,
-    updateGameIdeas
+    updateGameIdeas,
+    deleteGameIdea,
+    deleteSelectedGames
 } from '../actions/gameIdeaActions';
 
 const initialState = {
@@ -35,6 +37,14 @@ const gameIdeaReducer = createSlice({
                 const returnValue = item._id === gameData._id ? gameData : item;
                 return returnValue;
             }) : console.log('Unable to Complete Update Request.');
+        },
+        [deleteGameIdea.fulfilled] : (state, action) => {
+            const { success, gameId } = action.payload;
+            success ? state.gameIdeas = state.gameIdeas.filter(item => item._id !== gameId) : console.log('Delete did not work');
+        },
+        [deleteSelectedGames.fulfilled] : (state, action) => {
+            const { success, gameList } = action.payload;
+            success ? state.gameIdeas = state.gameIdeas.filter(({_id}) => !gameList.includes(_id)) : console.log('Something Went Wrong');
         }
     }
 });

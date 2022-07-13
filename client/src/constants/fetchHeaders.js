@@ -23,3 +23,7 @@ export const getHeader = (token) => {
 export const putHeader = (token) => {
     return checkTokenHeader(token);
 }
+
+export const deleteHeader = (token) => {
+    return checkTokenHeader(token);
+}

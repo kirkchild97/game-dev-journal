@@ -180,14 +180,58 @@ exports.deleteGameIdeaById = async (req, res) => {
     console.log('Hitting Delete Game by ID');
     try{
         const { middlewareUserId } = req.body;
+        const { gameIdeas } = await User.findOne({_id : middlewareUserId});
         const { gameId } = req.params;
-        const _id = Types.ObjectId(gameId);
-        // Ensure that the user is the owner of the game Idea with REACT implementation
-        const deletedGame = await GameIdea.findByIdAndDelete(_id);
-        return res.send(JSON.stringify({
-            success : true
-        }));
+        console.log(gameIdeas);
+        console.log(gameId);
+        if(gameIdeas.filter(item => Types.ObjectId(item) === Types.ObjectId(gameId))){
+            console.log('Able to Delete');
+            const _id = Types.ObjectId(gameId);
+            // Ensure that the user is the owner of the game Idea with REACT implementation
+            const deletedGame = await GameIdea.findByIdAndDelete(_id);
+            return res.send(JSON.stringify({
+                success : true,
+                gameId
+            }));
+        }
+        return res.send(JSON.stringify({success : false}));
     }catch(errors){
+        console.log(`Error Deleting Game Idea: ${errors}`);
+        return res.send(JSON.stringify({
+            success : false,
+            errors
+        }));
+    }
+}
+
+exports.deleteGameIdeaGroupById = async (req, res) => {
+    console.log('Hitting Group delete');
+    try{
+        const { gameList, middlewareUserId } = req.body;
+        const user = await User.findOne({_id : middlewareUserId});
+        // const gameIdeas = await GameIdea.find({
+        //     _id : {
+        //         $in : gameIdeas
+        //     }
+        // });
+        console.log(gameList);
+        const checkUserOwner = gameList.filter(game => user.gameIdeas.includes(Types.ObjectId(game)));
+        if(checkUserOwner){
+            console.log('Can Delete Group');
+            // const gameIdeas = await GameIdea.findByIdAndDelete({ $in : gameList });
+            const gameIdeas = await GameIdea.deleteMany({
+                _id : {
+                    $in : gameList
+                }
+            });
+            return res.send(JSON.stringify({
+                success : true,
+                gameList
+            }));
+        }
+        return res.send(JSON.stringify({success : false}));
+    }catch(errors) {
+        console.log(`Error Deleting Game Idea Group: ${errors}`);
         return res.send(JSON.stringify({
             success : false,
             errors
