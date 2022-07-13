@@ -16,7 +16,13 @@ const NavBar = () => {
     return (
         <nav className="row">
             <div className="col">
-                <NavLink to={isLoggedIn ? homeUserName : ''} className='btn btn-success'>Home</NavLink>
+                <NavLink to={isLoggedIn ? `user/${homeUserName}` : ''} end className='btn btn-success'>Home</NavLink>
+                {
+                    isLoggedIn ? 
+                    <>
+                        <NavLink to={`user/${homeUserName}/new`} end className='btn btn-success'>Create New Game Idea</NavLink>
+                    </> : ''
+                }
             </div>
             {isLoggedIn ? 
                 <div className="col-2">

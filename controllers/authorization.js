@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+const {verifyToken} = require('../utilities/auth');
+
 const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 exports.registerUser = async (req, res) => {
@@ -82,6 +84,29 @@ exports.loginUser = async (req, res) => {
         return res.send(JSON.stringify({
             success : false,
             error : e
+        }));
+    }
+}
+
+exports.validateToken = async (req, res) => {
+    try{
+        const { _id } = verifyToken(req);
+        const user = await User.findOne({_id});
+        if(user){
+            const token = jwt.sign({ _id }, process.env.JWT_SECRET,{
+                expiresIn : '2 days'
+            });
+            return res.send(JSON.stringify({
+                success : true,
+                token,
+                homeUserName : user.userName
+            }));
+        }
+    }catch(error) {
+        console.log(`Error Verifying Token: ${error}`);
+        return res.send(JSON.stringify({
+            success : false,
+            error
         }));
     }
 }

@@ -5,3 +5,17 @@ export const basePost = () => {
     }
 }
 
+export const checkTokenHeader = (token) => {
+    return {
+        ...basePost(),
+        'Authorization' : `Bearer ${token}`
+    }
+}
+
+export const postHeader = (token) => {
+    return checkTokenHeader(token);
+}
+
+export const getHeader = (token) => {
+    return checkTokenHeader(token);
+}

@@ -1,15 +1,21 @@
 import { useSelector } from "react-redux";
+import { Outlet } from "react-router-dom";
+
 import AddGameIdeaForm from "./Forms/AddGameIdeaForm";
+import ListGameIdeas from "./ListGameIdeas";
 
 const UserDashboard = () => {
     const { homeUserName } = useSelector(state => state.user);
     
     return (
         <div className="row">
-            <h2>Welcome, {homeUserName}!!</h2>
+            <h1>Welcome, {homeUserName}!!</h1>
             <div className="row">
                 <div className="col">
-                    <AddGameIdeaForm />
+                    <ListGameIdeas />
+                </div>
+                <div className="col">
+                    <Outlet />
                 </div>
             </div>
         </div>

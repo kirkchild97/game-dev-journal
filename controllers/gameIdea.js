@@ -1,11 +1,15 @@
 const GameIdea = require('../models/gameIdea');
+const User = require('../models/user');
 const { Types } = require('mongoose');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 exports.createGameIdea = async (req, res) => {
     console.log('Hitting Create Game');
     try{
         // Validate User either here or with middleware
         const {
+            middlewareUserId,
             name,
             genre,
             gameTags,
@@ -15,6 +19,7 @@ exports.createGameIdea = async (req, res) => {
             notes
         } = req.body;
         console.log(req.body);
+        const user = await User.findOne({_id : middlewareUserId});
         const validations = await validateGameIdea({name, gameLoop});
         if(validations.isValid){
             const gameIdea = new GameIdea({
@@ -27,11 +32,17 @@ exports.createGameIdea = async (req, res) => {
                 notes
             });
             console.log('Game Created! Saving Now.');
-            await gameIdea.save();
+            await gameIdea.save(async (error, game) => {
+                user.gameIdeas.push(game._id);
+                await user.save();
+            });
+            const token = jwt.sign({_id : middlewareUserId}, process.env.JWT_SECRET);
             return res.send(JSON.stringify({
                 success : true,
-                gameIdea
-            }))
+                gameIdea,
+                gameIdeas : user.gameIdeas,
+                token
+            }));
         }
         return res.send(JSON.stringify({
             success : false,
@@ -48,12 +59,36 @@ exports.createGameIdea = async (req, res) => {
 
 exports.getAllUserGameIdeas = async (req, res) => {
     console.log('Hitting Get All Games');
-    res.send(JSON.stringify({debug : true}));
+    console.log(req.body);
+    try{
+        const { middlewareUserId } = req.body;
+        const user = await User.findOne({_id : middlewareUserId});
+        const gameIdeas = await GameIdea.find({
+            _id : {
+                $in : user.gameIdeas
+            }
+        });
+        const token = jwt.sign({_id : middlewareUserId}, process.env.JWT_SECRET);
+        console.log('Found Games here');
+        console.log(gameIdeas);
+        return res.send(JSON.stringify({
+            success : true,
+            gameIdeas,
+            token
+        }));
+    }catch(error) {
+        console.log(`Error Getting User Game Ideas ${error}`);
+        return res.send(JSON.stringify({
+            success : false,
+            errors
+        }));
+    }
 }
 
 exports.getGameIdeaById = async (req, res) => {
     console.log('Hitting Get Game By ID');
     try{
+        const { middlewareUserId } = req.body;
         const { gameId } = req.params;
         const _id = Types.ObjectId(gameId);
         const gameIdea = await GameIdea.findOne({_id});
@@ -81,6 +116,7 @@ exports.getGameIdeaById = async (req, res) => {
 exports.updateGameIdeaById = async (req, res) => {
     console.log('Hitting Update Game By ID');
     try{
+        const { middlewareUserId } = req.body;
         const _id = Types.ObjectId(req.params.gameId);
         const {
             name,
@@ -131,6 +167,7 @@ exports.updateGameIdeaById = async (req, res) => {
 exports.deleteGameIdeaById = async (req, res) => {
     console.log('Hitting Delete Game by ID');
     try{
+        const { middlewareUserId } = req.body;
         const { gameId } = req.params;
         const _id = Types.ObjectId(gameId);
         // Ensure that the user is the owner of the game Idea with REACT implementation
@@ -163,3 +200,8 @@ const validateGameIdea = ({name, gameLoop}) => {
     }
     return validations;
 }
+
+// exports.getUserGameIdeas = async () => {
+//     const user = await User.findOne({_id});
+//     const 
+// }

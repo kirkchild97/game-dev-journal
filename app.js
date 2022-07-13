@@ -8,6 +8,9 @@ const PORT = 8080;
 
 const MONGOURI = process.env.MONGO_URI; 
 
+// Middleware
+const authorizeToken = require('./middleware/verifyToken');
+
 // Routers
 const authRoutes = require('./router/authRoutes');
 const gameRoutes = require('./router/gameIdeaRoutes');

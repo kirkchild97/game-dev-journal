@@ -18,16 +18,21 @@ const userReducer = createSlice({
             state.isLoggedIn = false;
             state.homeUserName = '';
             localStorage.clear();
+        },
+        tokenVerified(state, action){
+            const { success, homeUserName } = action.payload;
+            state.isLoggedIn = success;
+            state.homeUserName = success ? homeUserName : '';
         }
     },
     extraReducers : {
         [tryLoginUser.fulfilled] : (state, action) => {
             state.isLoggedIn = action.payload.success;
-            state.homeUserName = action.payload.homeUserName;
+            state.homeUserName = action.payload.success ? action.payload.homeUserName : '';
             localStorage.setItem('token', action.payload.token);
         }
     }
 });
 
-export const { logout } = userReducer.actions;
+export const { logout, tokenVerified } = userReducer.actions;
 export default userReducer.reducer;
