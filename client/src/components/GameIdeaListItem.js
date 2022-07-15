@@ -9,7 +9,8 @@ import {
     TableHead,
     TableRow,
     TableCell,
-    TableBody
+    TableBody,
+    Button
 } from '@mui/material';
 
 import { deleteGameIdea } from "../state/actions/gameIdeaActions";
@@ -38,24 +39,34 @@ const GameIdeaListItem = ({gameData, updateGameList}) => {
                 nav(`/user/${userName}/${gameData._id}`);
                 break;
         }
+
         
         // console.log(name);
         // name === 'editBtn' ? nav(`/user/${userName}/${gameData._id}/edit`) : 
         // nav(`/user/${userName}/${gameData._id}`);
     }
+    const displayGameLoop = () => {
+        const give = gameData.gameLoop.split('');
+        give.length = 30;
+        return `${give.join('')}...`;
+    }
 
-    const rowSettings = () => gameId === gameData._id ? 'table-primary table-striped border-dark' : 'table-info table-striped border-dark';
+    const rowSettings = () => gameId === gameData._id ? "rgba(139, 162, 252)" : '';
+
+
+    // className={rowSettings()} onClick={(e) => setGameIdeaActive(e)}
 
     return (
-        <tr className={rowSettings()} onClick={(e) => setGameIdeaActive(e)}>
-            <td><input type="checkbox" value={isActive} name={gameData._id} id={gameData._id} /></td>
-            <td className="text-break p-1">{gameData.name}</td>
-            <td className="text-break border-start border-end border-dark">{gameData.gameLoop}</td>
-            <td className="p-1">
-                <button name='deleteBtn' className="btn btn-danger">Delete</button>
-                <button name="editBtn" className="btn btn-info">Edit</button>
-            </td>
-        </tr>
+        <TableRow sx={{backgroundColor : rowSettings()}} hover onClick={(e) => setGameIdeaActive(e)}>
+            {/* <td><input type="checkbox" value={isActive} name={gameData._id} id={gameData._id} /></td> */}
+            <TableCell><input type="checkbox" value={isActive} name={gameData._id} id={gameData._id} /></TableCell>
+            <TableCell>{gameData.name}</TableCell>
+            <TableCell>{displayGameLoop()}</TableCell>
+            <TableCell>
+                <Button name='deleteBtn' variant="contained" color="error">Delete</Button>
+                <Button name="editBtn" variant="contained" color='primary'>Edit</Button>
+            </TableCell>
+        </TableRow>
     );
 }
 

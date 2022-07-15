@@ -39,7 +39,7 @@ const GameIdeaDetails = () => {
             <CardHeader title={<h2>{getGame().name}</h2>} />
             <CardContent>
                 <div>
-                    <CardHeader title={<h3>Genre:<Typography variant="span">{getGame().genre}</Typography></h3>} />
+                    <CardHeader title={<h3>Genre:<Typography className="h5" variant="span">{getGame().genre}</Typography></h3>} />
                 </div>
                 <Accordion>
                     <AccordionSummary
