@@ -116,13 +116,13 @@ const RegistrationForm = ({className}) => {
             </FormControl>
             <FormControl className='my-2 form-control'>
                 <InputLabel htmlFor="password">Password:</InputLabel>
-                <Input type="text" name="password" id="password"
+                <Input type="password" name="password" id="password"
                 onChange={(e) => {handleChange(e)}} value={inputs.password}/>
                 <FormHelperText error={!validateInputs('password')} >{errorMessages.passwordMin}</FormHelperText>
             </FormControl>
             <FormControl className='my-2 form-control'>
                 <InputLabel htmlFor="confirm">Confirm Password:</InputLabel>
-                <Input type="text" name="confirm" id="confirm"
+                <Input type="password" name="confirm" id="confirm"
                 onChange={(e) => {handleChange(e)}} value={inputs.confirm}/>
                 <FormHelperText error={!validateInputs('confirm')} >{errorMessages.confirm}</FormHelperText>
             </FormControl>
