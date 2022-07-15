@@ -90,37 +90,37 @@ const RegistrationForm = ({className}) => {
     return (
         <form onSubmit={(e) => handleSubmit(e)} className={className}>
             <CardHeader title={<h2>Register</h2>} />
-            <FormControl className='my-2'>
+            <FormControl className='my-2 form-control'>
                 <InputLabel htmlFor="firstName">First Name:</InputLabel>
-                <Input type="text" name="firstName" id="firstName"
+                <Input  type="text" name="firstName" id="firstName"
                 onChange={(e) => {handleChange(e)}} value={inputs.firstName}/>
                 <FormHelperText error={!validateInputs('firstName')} >{errorMessages.firstMin}</FormHelperText>
             </FormControl>
-            <FormControl className='my-2'>
+            <FormControl className='my-2 form-control'>
                 <InputLabel htmlFor="lastName">Last Name:</InputLabel>
                 <Input type="text" name="lastName" id="lastName"
                 onChange={(e) => {handleChange(e)}} value={inputs.lastName}/>
                 <FormHelperText error={!validateInputs('lastName')} >{errorMessages.lastMin}</FormHelperText>
             </FormControl>
-            <FormControl className='my-2'>
+            <FormControl className='my-2 form-control'>
                 <InputLabel htmlFor="userName">Username:</InputLabel>
                 <Input type="text" name="userName" id="userName"
                 onChange={(e) => {handleChange(e)}} value={inputs.userName}/>
                 <FormHelperText error={!validateInputs('userName')} >{errorMessages.userMin}</FormHelperText>
             </FormControl>
-            <FormControl className='my-2'>
+            <FormControl className='my-2 form-control'>
                 <InputLabel htmlFor="email">Email:</InputLabel>
                 <Input type="text" name="email" id="email"
                 onChange={(e) => {handleChange(e)}} value={inputs.email}/>
                 <FormHelperText error={!validateInputs('email')} >{errorMessages.emailFormat}</FormHelperText>
             </FormControl>
-            <FormControl className='my-2'>
+            <FormControl className='my-2 form-control'>
                 <InputLabel htmlFor="password">Password:</InputLabel>
                 <Input type="text" name="password" id="password"
                 onChange={(e) => {handleChange(e)}} value={inputs.password}/>
                 <FormHelperText error={!validateInputs('password')} >{errorMessages.passwordMin}</FormHelperText>
             </FormControl>
-            <FormControl className='my-2'>
+            <FormControl className='my-2 form-control'>
                 <InputLabel htmlFor="confirm">Confirm Password:</InputLabel>
                 <Input type="text" name="confirm" id="confirm"
                 onChange={(e) => {handleChange(e)}} value={inputs.confirm}/>

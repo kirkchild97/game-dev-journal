@@ -4,6 +4,13 @@ import {
 } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useState } from 'react';
+import {
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody
+} from '@mui/material';
 
 import { deleteGameIdea } from "../state/actions/gameIdeaActions";
 

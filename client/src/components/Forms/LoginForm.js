@@ -74,13 +74,13 @@ const LoginForm = ({className}) => {
         <form onSubmit={(e) => handleSubmit(e)} className={className}>
             <CardHeader title={<h2>Login</h2>} />
             <CardContent>
-                <FormControl className='my-2'>
+                <FormControl className='my-2 form-control'>
                     <InputLabel htmlFor="userNameEmail">Username or Email:</InputLabel>
                     <Input type="text" name="userNameEmail" id="userNameEmail"
                     onChange={(e) => {handleChange(e)}} value={inputs.userNameEmail}/>
                     <FormHelperText error={!validateInputs('userNameEmail')}>Username must be at least 3 characters long</FormHelperText>
                 </FormControl>
-                <FormControl className='my-2'>
+                <FormControl className='my-2 form-control'>
                     <InputLabel htmlFor="password">Password:</InputLabel>
                     <Input type="text" name="password" id="password"
                     onChange={(e) => {handleChange(e)}} value={inputs.password}/>

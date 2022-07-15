@@ -10,6 +10,17 @@ import {
     useParams,
     useNavigate
 } from 'react-router-dom';
+import {
+    FormControl,
+    InputLabel,
+    Input,
+    Button,
+    FormHelperText,
+    CardHeader,
+    CardContent,
+    TextField,
+    Typography
+} from '@mui/material';
 
 import {
     createGameIdeas,
@@ -201,66 +212,69 @@ const AddGameIdeaForm = () => {
     
     return (
         <form className='card p-3' onSubmit={(e) => handleSubmit(e)}>
-            <h2 className='h1'>{isEditing() ? 'Edit' : 'Add New'} Game Idea!!</h2>
-            <p className={inputs.name !== '' ? 'text-success' : 'text-danger'}>Name is required</p>
-            <p className={inputs.gameLoop !== '' ? 'text-success' : 'text-danger'}>Game Loop is required</p>
-            <div className='border-bottom border-dark py-3'>
-                <label className='h2' htmlFor="name">Name:</label>
-                <input className='form-control' type="text" name="name" id="name" 
+            <CardHeader title={<h2>{isEditing() ? 'Edit' : 'Add New'} Game Idea!!</h2>} />
+            <FormControl className='form-control my-2' >
+                <InputLabel className='h2' htmlFor="name">Name:</InputLabel>
+                <Input type="text" name="name" id="name" 
                 onChange={(e) => handleChange(e)} value={inputs.name}  />
-            </div>
-            <div className='border-bottom border-dark py-3'>
-                <label className='h3' htmlFor="genre">Genre:</label>
-                <input className='form-control' type="text" name="genre" id="genre" 
+                <FormHelperText error={inputs.name === ''} >Name is required</FormHelperText>
+            </FormControl>
+            <FormControl className='form-control my-2'>
+                <InputLabel className='h3' htmlFor="genre">Genre:</InputLabel>
+                <Input type="text" name="genre" id="genre" 
                 onChange={(e) => handleChange(e)} value={inputs.genre}  />
-            </div>
-            <div className='border-bottom border-dark py-3'>
-                <label className='h3 d-block'>Game Tags</label>
-                <label className='h4' htmlFor="gameTag">Add Tag:</label>
-                <input className='form-control' type="text" name="gameTag" id="gameTag" 
+            </FormControl>
+            <CardHeader title={<h3>Game Tags</h3>} />
+            <FormControl title={<h3>Title</h3>} className='form-control'>
+                {/* <label className='h3 d-block'>Game Tags</label> */}
+                <InputLabel htmlFor="gameTag">Add Tag:</InputLabel>
+                <Input type="text" name="gameTag" id="gameTag" 
                 onChange={(e) => handleChange(e)} value={gameTag} 
                 onFocus={(e) => changeActiveList(e)} onBlur={(e) => changeActiveList({target : {name : ''}})}  />
                 <DisplayFormList listName='gameTags' removeItem={removeListItem} list={inputs.gameTags} />
-            </div>
-            <div className='border-bottom border-dark py-3'>
-                <label className='h3' htmlFor="gameLoop">Game Loop:</label>
-                <input className='form-control' type="text" name="gameLoop" id="gameLoop" 
+            </FormControl>
+            <FormControl className='form-control my-2'>
+                <InputLabel htmlFor="gameLoop">Game Loop:</InputLabel>
+                <Input type="text" name="gameLoop" id="gameLoop" 
                 onChange={(e) => handleChange(e)} value={inputs.gameLoop}  />
-            </div>
-            <div className='border-bottom border-dark py-3'>
-                <label className='h3 d-block'>Inspirations</label>
-                <label className='h4' htmlFor="inspiration">Add Inspiration:</label>
-                <input className='form-control' type="text" name="inspiration" id="inspiration" 
+                <FormHelperText error={inputs.gameLoop === ''} >Game Loop is required</FormHelperText>
+            </FormControl>
+            <CardHeader title={<h3>Inspirations</h3>} />
+            <FormControl className='form-control my-2'>
+                <InputLabel htmlFor="inspiration">Add Inspiration:</InputLabel>
+                <Input type="text" name="inspiration" id="inspiration" 
                 onChange={(e) => handleChange(e)} value={inspiration}
                 onFocus={(e) => changeActiveList(e)} onBlur={(e) => changeActiveList({target : {name : ''}})}  />
                 <DisplayFormList listName='inspirations' removeItem={removeListItem} list={inputs.inspirations} />
-            </div>
-            <div className='border-bottom border-dark py-3'>
-                <label className='h3 d-block'>Target Systems</label>
-                <label className='h4' htmlFor="targetSystem">Add Systems:</label>
-                <input className='form-control' type="text" name="targetSystem" id="targetSystem" 
+            </FormControl>
+            <CardHeader title={<h3>Target Systems</h3>} />
+            <FormControl className='form-control my-2'>
+                <InputLabel htmlFor="targetSystem">Add Systems:</InputLabel>
+                <Input type="text" name="targetSystem" id="targetSystem" 
                 onChange={(e) => handleChange(e)} value={targetSystem}
                 onFocus={(e) => changeActiveList(e)} onBlur={(e) => changeActiveList({target : {name : ''}})}  />
                 <DisplayFormList listName='targetSystems' removeItem={removeListItem} list={inputs.targetSystems} />
-            </div>
-            <div>
-                <label className='h3'>Notes</label>
-                <div>
-                    <label className='h4' htmlFor="title">Title:</label>
-                    <input className='form-control' type="text" name="title" id="title" 
+            </FormControl>
+            <CardHeader title={<h3>Notes</h3>} />
+            <FormControl className='form-control my-2'>
+                <FormControl className='form-control my-2'>
+                    <InputLabel htmlFor="title">Title:</InputLabel>
+                    <Input type="text" name="title" id="title" 
                     onChange={(e) => handleChange(e)} value={newNote.title}
                     onFocus={(e) => changeActiveList(e)} onBlur={(e) => changeActiveList({target : {name : ''}})}  />
-                </div>
-                <div>
-                    <label className='h4' htmlFor="description">Description:</label>
-                    <input className='form-control' type="text" name="description" id="description" 
+                </FormControl>
+                <FormControl className='form-control my-2'>
+                    <TextField multiline rows={5} maxRows={5} name="description" id="description"
+                    label='Description'
                     onChange={(e) => handleChange(e)} value={newNote.description}
                     onFocus={(e) => changeActiveList(e)} onBlur={(e) => changeActiveList({target : {name : ''}})}  />
-                    <p onClick={(e) => submitNote()} className='btn btn-primary'>Add Note</p>
+                    <Typography variant='button' onClick={(e) => submitNote()} className='btn btn-primary my-3'>Add Note</Typography>
                     <DisplayNoteList list={inputs.notes} listName='notes' removeItem={removeNoteItem} />
-                </div>
-            </div>
-            <input type="submit" className='btn btn-primary' value={isEditing() ? 'Submit Changes' : 'Create New Game Idea'} />
+                </FormControl>
+            </FormControl>
+            <Button size='large' type='submit' variant='outlined'>
+                {isEditing() ? 'Submit Changes' : 'Create New Game Idea'}
+            </Button>
         </form>
     )
 }

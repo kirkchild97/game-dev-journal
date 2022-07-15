@@ -1,6 +1,16 @@
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import {
+    Accordion,
+    Card,
+    CardHeader,
+    CardContent,
+    AccordionSummary,
+    AccordionDetails,
+    Typography
+} from '@mui/material';
+import { ExpandMore } from '@mui/icons-material';
 
 const GameIdeaDetails = () => {
     const { gameId } = useParams();
@@ -16,47 +26,75 @@ const GameIdeaDetails = () => {
     // }, [getGame])
 
     const listItems = (listName) => getGame()[listName].map(item => <li key={item}>{item}</li>);
-    const listNotes = () => getGame().notes.map(note => <li key={note.title+note.description}>
-        <h4>{note.title}</h4>
-        <p>{note.description}</p>
-    </li>)
+    const listNotes = () => getGame().notes.map((note, index) => (
+        <li key={note.title+note.description}>
+        <CardHeader title={<h4>{note.title}</h4>} />
+        <Typography>{note.description}</Typography>
+        {index !== getGame().notes.length - 1 ? <hr/> : ''}
+    </li>
+    ))
 
     return getGame() ? (
-        <div className="card p-3">
-            <h2>{getGame().name}</h2>
-            <div>
-                <h3>Genre:</h3>
-                <p>{getGame().genre}</p>
-            </div>
-            <div>
-                <h3>Additional Tags: </h3>
-                <ul>
-                    {listItems('gameTags')}
-                </ul>
-            </div>
-            <div>
-                <h3>Core Game Loop:</h3>
-                <p>{getGame().gameLoop}</p>
-            </div>
-            <div>
-                <h3>Inspirations:</h3>
-                <ul>
-                    {listItems('inspirations')}
-                </ul>
-            </div>
-            <div>
-                <h3>Target Systems:</h3>
-                <ul>
-                    {listItems('targetSystems')}
-                </ul>
-            </div>
-            <div>
-                <h3>Additional Notes:</h3>
-                <ul>
-                    {listNotes()}
-                </ul>
-            </div>
-        </div>
+        <Card className="card p-3">
+            <CardHeader title={<h2>{getGame().name}</h2>} />
+            <CardContent>
+                <div>
+                    <CardHeader title={<h3>Genre:<Typography variant="span">{getGame().genre}</Typography></h3>} />
+                </div>
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMore />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                        >
+                        <Typography variant="h6">Additional Tags</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        {listItems('gameTags')}
+                    </AccordionDetails>
+                </Accordion>
+                <div>
+                    <CardHeader title={<h3>Core Game Loop:</h3>} />
+                    <Typography>{getGame().gameLoop}</Typography>
+                </div>
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMore />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                        >
+                        <Typography variant="h6">Inspirations</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        {listItems('inspirations')}
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMore />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                        >
+                        <Typography variant="h6">Target Systems</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        {listItems('targetSystems')}
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMore />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                        >
+                        <Typography variant="h6">Notes</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails className="list-unstyled">
+                        {listNotes()}
+                    </AccordionDetails>
+                </Accordion>
+            </CardContent>
+        </Card>
     ) : <div></div>;
 }
 

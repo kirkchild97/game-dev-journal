@@ -1,3 +1,5 @@
+import { Delete } from '@mui/icons-material';
+
 const DisplayNoteListItem = ({itemData, listName, removeItem}) => {
 
     const removeNoteItem = (e) => {
@@ -6,10 +8,12 @@ const DisplayNoteListItem = ({itemData, listName, removeItem}) => {
     }
     
     return (
-        <li>
-            <h3>{itemData.title}</h3>
+        <li className='card p-3 my-1'>
+            <div className='d-flex justify-content-between'>
+                <h3>{itemData.title}</h3>
+                <Delete onClick={(e) => removeNoteItem(e)} />
+            </div>
             <p>{itemData.description}</p>
-            <p className="btn btn-danger" onClick={(e) => removeNoteItem(e)}>Remove Note</p>
         </li>
     );
 }
