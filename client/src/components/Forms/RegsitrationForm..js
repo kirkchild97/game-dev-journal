@@ -4,6 +4,16 @@ import { emailRegex } from '../../constants/validations';
 
 import { tryRegisterUser } from '../../state/actions/userActions';
 
+import {
+    FormControl,
+    InputLabel,
+    Input,
+    Button,
+    FormHelperText,
+    CardHeader,
+    CardContent
+} from '@mui/material';
+
 const RegistrationForm = ({className}) => {
     const dispatch = useDispatch();
     const [inputs, setInputs] = useState({
@@ -79,46 +89,44 @@ const RegistrationForm = ({className}) => {
 
     return (
         <form onSubmit={(e) => handleSubmit(e)} className={className}>
-            <h2>Register</h2>
-            <>
-                <p className={validateInputs('firstName') ? 'text-success' : 'text-danger'}>{ errorMessages.firstMin }</p>
-                <p className={validateInputs('lastName') ? 'text-success' : 'text-danger'}>{ errorMessages.lastMin }</p>
-                <p className={validateInputs('email') ? 'text-success' : 'text-danger'}>{ errorMessages.emailFormat }</p>
-                <p className={validateInputs('userName') ? 'text-success' : 'text-danger'}>{ errorMessages.userMin }</p>
-                <p className={validateInputs('password') ? 'text-success' : 'text-danger'}>{ errorMessages.passwordMin }</p>
-                <p className={validateInputs('confirm') ? 'text-success' : 'text-danger'}>{ errorMessages.confirm }</p>
-            </>
-            <div className=''>
-                <label htmlFor="firstName">First Name:</label>
-                <input className='form-control' type="text" name="firstName" id="firstName"
+            <CardHeader title={<h2>Register</h2>} />
+            <FormControl className='my-2 form-control'>
+                <InputLabel htmlFor="firstName">First Name:</InputLabel>
+                <Input  type="text" name="firstName" id="firstName"
                 onChange={(e) => {handleChange(e)}} value={inputs.firstName}/>
-            </div>
-            <div className=''>
-                <label htmlFor="lastName">Last Name:</label>
-                <input className='form-control' type="text" name="lastName" id="lastName"
+                <FormHelperText error={!validateInputs('firstName')} >{errorMessages.firstMin}</FormHelperText>
+            </FormControl>
+            <FormControl className='my-2 form-control'>
+                <InputLabel htmlFor="lastName">Last Name:</InputLabel>
+                <Input type="text" name="lastName" id="lastName"
                 onChange={(e) => {handleChange(e)}} value={inputs.lastName}/>
-            </div>
-            <div className=''>
-                <label htmlFor="userName">Username:</label>
-                <input className='form-control' type="text" name="userName" id="userName"
+                <FormHelperText error={!validateInputs('lastName')} >{errorMessages.lastMin}</FormHelperText>
+            </FormControl>
+            <FormControl className='my-2 form-control'>
+                <InputLabel htmlFor="userName">Username:</InputLabel>
+                <Input type="text" name="userName" id="userName"
                 onChange={(e) => {handleChange(e)}} value={inputs.userName}/>
-            </div>
-            <div className=''>
-                <label htmlFor="email">Email:</label>
-                <input className='form-control' type="text" name="email" id="email"
+                <FormHelperText error={!validateInputs('userName')} >{errorMessages.userMin}</FormHelperText>
+            </FormControl>
+            <FormControl className='my-2 form-control'>
+                <InputLabel htmlFor="email">Email:</InputLabel>
+                <Input type="text" name="email" id="email"
                 onChange={(e) => {handleChange(e)}} value={inputs.email}/>
-            </div>
-            <div className=''>
-                <label htmlFor="password">Password:</label>
-                <input className='form-control' type="text" name="password" id="password"
+                <FormHelperText error={!validateInputs('email')} >{errorMessages.emailFormat}</FormHelperText>
+            </FormControl>
+            <FormControl className='my-2 form-control'>
+                <InputLabel htmlFor="password">Password:</InputLabel>
+                <Input type="text" name="password" id="password"
                 onChange={(e) => {handleChange(e)}} value={inputs.password}/>
-            </div>
-            <div className=''>
-                <label htmlFor="confirm">Confirm Password:</label>
-                <input className='form-control' type="text" name="confirm" id="confirm"
+                <FormHelperText error={!validateInputs('password')} >{errorMessages.passwordMin}</FormHelperText>
+            </FormControl>
+            <FormControl className='my-2 form-control'>
+                <InputLabel htmlFor="confirm">Confirm Password:</InputLabel>
+                <Input type="text" name="confirm" id="confirm"
                 onChange={(e) => {handleChange(e)}} value={inputs.confirm}/>
-            </div>
-            <input className='btn col-6 border border-2' type="submit" value="Register" />
+                <FormHelperText error={!validateInputs('confirm')} >{errorMessages.confirm}</FormHelperText>
+            </FormControl>
+            <Button size='large' disabled={Object.keys(inputs).filter(i => !validateInputs(i)).length} className='btn col-6 border border-2' type="submit" >Register</Button>
         </form>
     );
 }

@@ -1,11 +1,19 @@
 import RegistrationForm from "./components/Forms/RegsitrationForm.";
 import LoginForm from "./components/Forms/LoginForm";
 
+import {
+    Card
+} from '@mui/material';
+
 const LoginAndRegisterPage = () => {
     return (
         <div className="row justify-content-between">
-            <RegistrationForm className='card p-3 col-5' />
-            <LoginForm className='card p-3 col-5' />
+            <Card variant="outlined" className="col-5">
+                <RegistrationForm />
+            </Card>
+            <Card className="col-5">
+                <LoginForm />
+            </Card>
         </div>
     );
 }

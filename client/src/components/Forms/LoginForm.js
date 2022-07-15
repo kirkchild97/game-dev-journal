@@ -6,6 +6,15 @@ import { emailRegex } from '../../constants/validations';
 
 import { tryLoginUser } from '../../state/actions/userActions';
 
+import {
+    FormControl,
+    InputLabel,
+    Input,
+    Button,
+    FormHelperText,
+    CardHeader,
+    CardContent
+} from '@mui/material';
 
 const LoginForm = ({className}) => {
     const dispatch = useDispatch();
@@ -63,22 +72,22 @@ const LoginForm = ({className}) => {
 
     return (
         <form onSubmit={(e) => handleSubmit(e)} className={className}>
-            <h2>Login</h2>
-            <>
-                <p className={validateInputs('userNameEmail') ? 'text-success' : 'text-danger'}>{ errorMessages.userMin }</p>
-                <p className={validateInputs('password') ? 'text-success' : 'text-danger'}>{ errorMessages.passwordMin }</p>
-            </>
-            <div className=''>
-                <label htmlFor="userNameEmail">Username or Email:</label>
-                <input className='form-control' type="text" name="userNameEmail" id="userNameEmail"
-                onChange={(e) => {handleChange(e)}} value={inputs.userNameEmail}/>
-            </div>
-            <div className=''>
-                <label htmlFor="password">Password:</label>
-                <input className='form-control' type="text" name="password" id="password"
-                onChange={(e) => {handleChange(e)}} value={inputs.password}/>
-            </div>
-            <input className='btn col-6 border border-2' type="submit" value="Register" />
+            <CardHeader title={<h2>Login</h2>} />
+            <CardContent>
+                <FormControl className='my-2 form-control'>
+                    <InputLabel htmlFor="userNameEmail">Username or Email:</InputLabel>
+                    <Input type="text" name="userNameEmail" id="userNameEmail"
+                    onChange={(e) => {handleChange(e)}} value={inputs.userNameEmail}/>
+                    <FormHelperText error={!validateInputs('userNameEmail')}>Username must be at least 3 characters long</FormHelperText>
+                </FormControl>
+                <FormControl className='my-2 form-control'>
+                    <InputLabel htmlFor="password">Password:</InputLabel>
+                    <Input type="text" name="password" id="password"
+                    onChange={(e) => {handleChange(e)}} value={inputs.password}/>
+                    <FormHelperText error={!validateInputs('password')}>Passowrd must be at least 8 characters long</FormHelperText>
+                </FormControl>
+                <Button size="large" variant='outlined' disabled={!validateInputs('password') || !validateInputs('userNameEmail')} type="submit" value="Register" >Login</ Button>
+            </CardContent>
         </form>
     );
 }
