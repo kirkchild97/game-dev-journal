@@ -76,8 +76,8 @@ exports.getAllUserGameIdeas = async (req, res) => {
             gameIdeas,
             token
         }));
-    }catch(error) {
-        console.log(`Error Getting User Game Ideas ${error}`);
+    }catch(errors) {
+        console.log(`Error Getting User Game Ideas ${errors}`);
         return res.send(JSON.stringify({
             success : false,
             errors
